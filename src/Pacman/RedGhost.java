@@ -4,17 +4,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 
 public class RedGhost implements Drawable {
-	private int posx = 400, posy = 400;
+	public static int posx = 240, posy = 200;
 	private long deadAt = Long.MAX_VALUE;
 	private boolean isScatterMode = true;
 	private boolean isChaseMode = false;
 	private boolean isFrightenedMode = false;
 	private long startTime = System.currentTimeMillis();
 	private boolean reachedPos = false;
+	private Queue<int[]> path = new LinkedList<>();
 	
 	@Override
 	public void draw(Graphics g) {
@@ -23,8 +25,8 @@ public class RedGhost implements Drawable {
 			if(posx == -1) {
 				if(System.currentTimeMillis() - deadAt > 5000) {
 					redGhost = ImageIO.read(new File("images\\red.png"));
-					posx = 400;
-					posy = 400;
+					posx = 260;
+					posy = 240;
 				} else {
 					posx = -1;
 					return;
@@ -67,46 +69,34 @@ public class RedGhost implements Drawable {
 		}
 		
 		if(isScatterMode) {
-			int xdiff = Math.abs(posx - 460);
-			int ydiff = Math.abs(posy - 40);
+			int desX = 400, desY = 80;
+			int[] next = new int[] {-1, -1};
 			
-			if(xdiff > ydiff) {
-				if(posx > 460) {
-					posx -= 20;
-				} else {
-					posx += 20;
-				}
+			if(!path.isEmpty()) {
+				next = path.poll();
+				posx = next[1];
+				posy = next[0];
 			} else {
-				if(posy > 40) {
-					posy -= 20;
-				} else {
-					posy += 20;
-				}
+				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
 			
-			if(posx == 460 && posy == 40) {
+			if(posx == 400 && posy == 80) {
 				reachedPos = true;
 			}
 			
 		} else if(isChaseMode) {
-			int xdiff = Math.abs(posx - Pacman.posx);
-			int ydiff = Math.abs(posy - Pacman.posy);
+			int desX = Pacman.posx, desY = Pacman.posy;
+			int[] next = new int[] {-1, -1};
 			
-			if(xdiff > ydiff) {
-				if(posx > Pacman.posx) {
-					posx -= 20;
-				} else {
-					posx += 20;
-				}
+			if(!path.isEmpty()) {
+				next = path.poll();
+				posx = next[1];
+				posy = next[0];
 			} else {
-				if(posy > Pacman.posy) {
-					posy -= 20;
-				} else {
-					posy += 20;
-				}
+				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
-			
 		} else if(isFrightenedMode) {
+			int prex = posx, prey = posy;
 			if(Math.random() > 0.5) {
 				if(Math.random() > 0.5) {
 					posx += 20;
@@ -120,20 +110,14 @@ public class RedGhost implements Drawable {
 					posy -= 20;
 				}
 			}
+			
+			if(Maze.maze[posy / 20][posx / 20] == 1) {
+				posx = prex;
+				posy = prey;
+			}
 		}
 		
-		if(posx > 480 )
-			posx = 480;
-		if(posy > 480)
-			posy = 480;
-		if(posx < 0)
-			posx = 0;
-		if(posy < 0)
-			posy = 0;
-		
-		
-		if(posx != -1)
-			g.drawImage(redGhost, posx, posy, null);
+		g.drawImage(redGhost, posx, posy, null);
 		
 		if(posx == Pacman.posx && posy == Pacman.posy) {
 			if(Pacman.isHunter) {

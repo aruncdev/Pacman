@@ -4,17 +4,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 
 public class OrangeGhost implements Drawable {
-	private int posx = 340, posy = 400;
+	public static int posx = 200, posy = 240;
 	private long deadAt = Long.MAX_VALUE;
 	private boolean isScatterMode = true;
 	private boolean isChaseMode = false;
 	private boolean isFrightenedMode = false;
 	private long startTime = System.currentTimeMillis();
 	private boolean reachedPos = false;
+	private Queue<int[]> path = new LinkedList<>();
 	
 	@Override
 	public void draw(Graphics g) {
@@ -23,14 +25,14 @@ public class OrangeGhost implements Drawable {
 			if(posx == -1) {
 				if(System.currentTimeMillis() - deadAt > 5000) {
 					orangeGhost = ImageIO.read(new File("images\\orange.png"));
-					posx = 340;
-					posy = 400;
+					posx = 200;
+					posy = 240;
 				} else {
 					posx = -1;
 					return;
 				}
 			} else {
-				if(Pacman.isHunter && deadAt <= Long.MAX_VALUE) {
+				if(Pacman.isHunter) {
 					orangeGhost = ImageIO.read(new File("images\\afraid.png"));
 				} else {
 					orangeGhost = ImageIO.read(new File("images\\orange.png"));
@@ -67,48 +69,34 @@ public class OrangeGhost implements Drawable {
 		}
 		
 		if(isScatterMode) {
-			System.out.println("scatter mode" + " " + posx + " " + posy);
-			int xdiff = Math.abs(posx - 460);
-			int ydiff = Math.abs(posy - 460);
+			int desX = 80, desY = 340;
+			int[] next = new int[] {-1, -1};
 			
-			if(xdiff > ydiff) {
-				if(posx > 460) {
-					posx -= 20;
-				} else {
-					posx += 20;
-				}
+			if(!path.isEmpty()) {
+				next = path.poll();
+				posx = next[1];
+				posy = next[0];
 			} else {
-				if(posy > 460) {
-					posy -= 20;
-				} else {
-					posy += 20;
-				}
+				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
 			
-			if(posx == 460 && posy == 460) {
+			if(posx == 80 && posy == 340) {
 				reachedPos = true;
 			}
 			
 		} else if(isChaseMode) {
-			System.out.println("chase mode");
-			int xdiff = Math.abs(posx - Pacman.posx);
-			int ydiff = Math.abs(posy - Pacman.posy);
+			int desX = Pacman.posx, desY = Pacman.posy;
+			int[] next = new int[] {-1, -1};
 			
-			if(xdiff > ydiff) {
-				if(posx > Pacman.posx) {
-					posx -= 20;
-				} else {
-					posx += 20;
-				}
+			if(!path.isEmpty()) {
+				next = path.poll();
+				posx = next[1];
+				posy = next[0];
 			} else {
-				if(posy > Pacman.posy) {
-					posy -= 20;
-				} else {
-					posy += 20;
-				}
+				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
 		} else if(isFrightenedMode) {
-			System.out.println("frightened mode");
+			int prex = posx, prey = posy;
 			if(Math.random() > 0.5) {
 				if(Math.random() > 0.5) {
 					posx += 20;
@@ -122,22 +110,14 @@ public class OrangeGhost implements Drawable {
 					posy -= 20;
 				}
 			}
+			
+			if(Maze.maze[posy / 20][posx / 20] == 1) {
+				posx = prex;
+				posy = prey;
+			}
 		}
 		
-		if(posx > 480 )
-			posx = 480;
-		if(posy > 480)
-			posy = 480;
-		if(posx < 0)
-			posx = 0;
-		if(posy < 0)
-			posy = 0;
-		
-
 		g.drawImage(orangeGhost, posx, posy, null);
-		
-		if(posx != -1)
-			g.drawImage(orangeGhost, posx, posy, null);
 		
 		if(posx == Pacman.posx && posy == Pacman.posy) {
 			if(Pacman.isHunter) {

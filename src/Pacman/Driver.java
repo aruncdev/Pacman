@@ -37,7 +37,7 @@ public class Driver extends JFrame implements ActionListener, KeyListener {
 	}
 	
 	public void startTimer() {
-		Timer timer = new Timer(100, this);
+		Timer timer = new Timer(200, this);
 		timer.start();
 	}
 	
@@ -49,19 +49,6 @@ public class Driver extends JFrame implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-//		int keyCode = e.getKeyCode();
-//		
-//		switch(keyCode) {
-//		case KeyEvent.VK_UP: pacman.Up(); break;
-//		case KeyEvent.VK_DOWN: pacman.Down(); break;
-//		case KeyEvent.VK_LEFT: pacman.Left(); break;
-//		case KeyEvent.VK_RIGHT: pacman.Right(); break;
-//		}
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		
 		switch(keyCode) {
@@ -70,8 +57,18 @@ public class Driver extends JFrame implements ActionListener, KeyListener {
 		case KeyEvent.VK_LEFT: pacman.Left(); break;
 		case KeyEvent.VK_RIGHT: pacman.Right(); break;
 		}
-		
-		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+//		int keyCode = e.getKeyCode();
+//		
+//		switch(keyCode) {
+//		case KeyEvent.VK_UP: pacman.Up(); break;
+//		case KeyEvent.VK_DOWN: pacman.Down(); break;
+//		case KeyEvent.VK_LEFT: pacman.Left(); break;
+//		case KeyEvent.VK_RIGHT: pacman.Right(); break;
+//		}
 	}
 
 	@Override
