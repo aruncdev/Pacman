@@ -37,13 +37,12 @@ public class Driver extends JFrame implements ActionListener, KeyListener {
 	}
 	
 	public void startTimer() {
-		Timer timer = new Timer(200, this);
+		Timer timer = new Timer(100, this);
 		timer.start();
 	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

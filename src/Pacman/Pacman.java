@@ -32,6 +32,40 @@ public class Pacman implements Drawable {
 		
 		g.drawImage(pacman, posx, posy, null);
 		
+		if(Edibles.edibles.containsKey(posx) && Edibles.edibles.get(posx).contains(posy)) {
+			Edibles.edibles.get(posx).remove(posy);
+			Maze.score = Maze.score + 1;
+			if(Edibles.edibles.get(posx).size() == 0) {
+				Edibles.edibles.remove(posx);
+			}
+			
+			if(Edibles.edibles.size() == 0 && Edibles.cherries.size() == 0) {
+				Maze.endGame();
+			}
+		}
+		
+		if(Edibles.cherries.containsKey(posx) && Edibles.cherries.get(posx).contains(posy)) {
+			Edibles.cherries.get(posx).remove(posy);
+			Maze.score = Maze.score + 10;
+			if(Edibles.cherries.get(posx).size() == 0) {
+				Edibles.cherries.remove(posx);
+			}
+			
+			if(Edibles.edibles.size() == 0 && Edibles.cherries.size() == 0) {
+				Maze.endGame();
+			}
+		}
+		
+		if(Edibles.powerUps.containsKey(posx) && Edibles.powerUps.get(posx).contains(posy)) {
+			Edibles.powerUps.get(posx).remove(posy);
+			Maze.score = Maze.score + 20;
+			if(Edibles.powerUps.get(posx).size() == 0) {
+				Edibles.powerUps.remove(posx);
+			}
+			isHunter = true;
+			hunterAt = System.currentTimeMillis();
+		}
+		
 		boolean isDead = (posx == OrangeGhost.posx && posy == OrangeGhost.posy) || 
 				(posx == BlueGhost.posx && posy == BlueGhost.posy) ||
 				(posx == PinkGhost.posx && posy == PinkGhost.posy) ||

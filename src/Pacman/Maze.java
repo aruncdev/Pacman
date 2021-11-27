@@ -1,9 +1,7 @@
 package Pacman;
 
 import java.awt.*;
-import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.*;
 
 import javax.swing.*;
 
@@ -11,34 +9,48 @@ public class Maze extends JPanel {
 	
 	private static Drawable items[];	
 	public static int[][] maze;
+	public static int score;
+	public static int pacmanLives;
 	
 	public Maze(Pacman pacman, RedGhost redGhost, PinkGhost pinkGhost, BlueGhost blueGhost, OrangeGhost orangeGhost) {
-		items = new Drawable[5];	
+		items = new Drawable[6];	
 		items[0] = pacman;
 		items[1] = redGhost;
 		items[2] = pinkGhost;
 		items[3] = blueGhost;
 		items[4] = orangeGhost;
-//		items[5] = new PowerDot(300, 40);
-//		items[6] = new Score();
-		maze = new int[24][24];
+		maze = new int[25][25];
 		designMaze();
+		items[5] = new Edibles();
+		score = 0;
+		pacmanLives = 3;
 	}
 	
 	public static void endGame() {
-		items = new Drawable[0];
-		JFrame frame = new JFrame();
-		JOptionPane.showMessageDialog(frame,
-			    "Game Over!!! Your score: " + Score.score,
-			    "Game Over!!!",
-			    JOptionPane.PLAIN_MESSAGE);
+		
+		
+		if(Edibles.edibles.size() == 0 && Edibles.cherries.size() == 0) {
+			items = new Drawable[0];
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame,
+				    "You Won!!! Your score: " + score,
+				    "You Won!!!",
+				    JOptionPane.PLAIN_MESSAGE);
+		} 
+		else {
+			items = new Drawable[0];
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame,
+				    "Game Over!!! Your score: " + score,
+				    "Game Over!!!",
+				    JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
 		g.setColor(Color.LIGHT_GRAY);
-//		g.drawRect(20, 20, 560, 560);
 		
 		for(int i = 20; i < 500; i = i + 20) {
 			g.drawLine(i, 20, i, 480);
@@ -61,15 +73,9 @@ public class Maze extends JPanel {
 			}
 		}
 		
-//		int posx = Pacman.posx, posy = Pacman.posy;
-//		boolean isDead = (posx == OrangeGhost.posx && posy == OrangeGhost.posy) || 
-//				(posx == BlueGhost.posx && posy == BlueGhost.posy) ||
-//				(posx == PinkGhost.posx && posy == PinkGhost.posy) ||
-//				(posx == RedGhost.posx && posy == RedGhost.posy);
-//		
-//		if(isDead && !Pacman.isHunter) {
-//			endGame();
-//		}
+		
+		g.setColor(Color.BLACK);
+		g.drawString("score: " + score, 500, 36);
 	}
 	
 	private static void designMaze() {
@@ -81,7 +87,7 @@ public class Maze extends JPanel {
 			{4, 1}, {4, 9}, {4, 15}, {4, 23}, {5, 0}, {5, 1}, {5, 2}, {5, 3}, {5, 5}, {5, 7}, {5, 9}, {5, 11}, {5, 12}, {5, 13}, {5, 15}, 
 			{5, 17}, {5, 19}, {5, 21}, {5, 22}, {5, 23}, {6, 0}, {6, 1}, {6, 5}, {6, 7}, {6, 9}, {6, 11}, {6, 13}, {6, 15}, {6, 17}, {6, 19}, 
 			{6, 23}, {7, 0}, {7, 1}, {7, 3}, {7, 5}, {7, 7}, {7, 9}, {7, 11}, {7, 12}, {7, 13}, {7, 15}, {7, 17}, {7, 19}, {7, 21}, {7, 23}, 
-			{8, 0}, {8, 1}, {8, 5}, {8, 7}, {8, 17}, {8, 19}, {8, 23}, {9, 0}, {9, 1}, {9, 2}, {9, 3}, {9, 4}, {9, 5}, {9, 7}, {9, 10},
+			{8, 0}, {8, 1}, {8, 5}, {8, 7}, {8, 17}, {8, 19}, {8, 23}, {9, 0}, {9, 1}, {9, 2}, {9, 3}, {9, 4}, {9, 5}, {9, 7}, {9, 9}, {9, 10},
 			{9, 11}, {9, 12}, {9, 13}, {9, 14}, {9, 15}, {9, 17}, {9, 19}, {9, 20}, {9, 21}, {9, 22}, {9, 23}, {10, 0}, {10, 1}, {10, 7}, 
 			{10, 17}, {10, 23}, {11, 0}, {11, 1}, {11, 3}, {11, 4}, {11, 5}, {11, 6}, {11, 7}, {11, 9}, {11, 10}, {11, 11}, {11, 13}, {11, 14}, 
 			{11, 15}, {11, 17}, {11, 18}, {11, 19}, {11, 20}, {11, 21}, {11, 23}, {12, 0}, {12, 9}, {12, 15}, {13, 0}, {13, 1}, {13, 3}, {13, 4}, 

@@ -69,7 +69,7 @@ public class BlueGhost implements Drawable {
 		}
 		
 		if(isScatterMode) {
-			int desX = 120, desY = 80;
+			int desX = 440, desY = 240;
 			int[] next = new int[] {-1, -1};
 			
 			if(!path.isEmpty()) {
@@ -80,7 +80,7 @@ public class BlueGhost implements Drawable {
 				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
 			
-			if(posx == 120 && posy == 80) {
+			if(posx == 440 && posy == 240) {
 				reachedPos = true;
 			}
 			
@@ -96,16 +96,17 @@ public class BlueGhost implements Drawable {
 				path.addAll(Maze.getPathForGhost(posy / 20, posx / 20, desY / 20, desX / 20));
 			}
 		} else if(isFrightenedMode) {
+			path = new LinkedList<>();
 			int prex = posx, prey = posy;
 			if(Math.random() > 0.5) {
 				if(Math.random() > 0.5) {
-					posx += 20;
+					posx += posx >= 440 ? 0 : 20;
 				} else {
 					posx -= 20;
 				}
 			} else {
 				if(Math.random() > 0.5) {
-					posy += 20;
+					posy += posy >= 440 ? 0 : 20;
 				} else {
 					posy -= 20;
 				}
@@ -121,9 +122,10 @@ public class BlueGhost implements Drawable {
 		
 		if(posx == Pacman.posx && posy == Pacman.posy) {
 			if(Pacman.isHunter) {
-				Score.score = Score.score + 10;
+//				Score.score = Score.score + 10;
 				deadAt = System.currentTimeMillis();
 				posx = -1;
+				path = new LinkedList<>();
 			} else {
 				Maze.endGame();
 			}			
