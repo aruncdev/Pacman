@@ -4,21 +4,22 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 public class Pacman implements Drawable {
-//	static int posy = 80, posx = 80;
-	static int posy = 80, posx = 80;
-	static boolean isHunter = false;
+	static int posy, posx;
+	static boolean isHunter;
 	static long hunterAt;
 	private BufferedImage pacman;
 	
 	Pacman(){
+		posx = 80;
+		posy = 80;
+		isHunter = false;
 		hunterAt = 0;
 		try {
-			pacman = ImageIO.read(new File("images\\rightPacman.png"));
+			pacman = ImageIO.read(new File("images/rightPacman.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,13 +78,11 @@ public class Pacman implements Drawable {
 	}
 	
 	public void Up() {
-//		int[] nextPosition = new int[] {posx / 20, };
 		if(Maze.maze[(posy - 20) / 20][posx / 20] != 1) {
 			posy -= 20;
-//			System.out.println(Arrays.toString(nextPosition));
 		}
 		try {
-			pacman = ImageIO.read(new File("images\\upPacman.png"));
+			pacman = ImageIO.read(new File("images/upPacman.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,17 +91,15 @@ public class Pacman implements Drawable {
 	public void Down() {
 		if(Maze.maze[(posy + 20) / 20][posx / 20] != 1) {
 			posy += 20;
-//			System.out.println(Arrays.toString(nextPosition));
 		}
 		try {
-			pacman = ImageIO.read(new File("images\\downPacman.png"));
+			pacman = ImageIO.read(new File("images/downPacman.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void Left() {
-//		System.out.println(posy / 20 + " " + ((posx - 20) / 20));
 		if(posy / 20 == 12 && ((posx - 20) / 20) == 0) {
 			posy = 12 * 20;
 			posx = 23 * 20;
@@ -112,7 +109,7 @@ public class Pacman implements Drawable {
 			posx -= 20;
 		}
 		try {
-			pacman = ImageIO.read(new File("images\\leftPacman.png"));
+			pacman = ImageIO.read(new File("images/leftPacman.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -124,14 +121,11 @@ public class Pacman implements Drawable {
 			posx = 1 * 20;
 			return;
 		}
-//		System.out.println(posy / 20 + " " + ((posx + 20) / 20));
-//		int[] nextPosition = new int[] {(posx + 20) / 20, posy / 20};
 		if(Maze.maze[posy / 20][(posx + 20) / 20] != 1) {
 			posx += 20;
-//			System.out.println(Arrays.toString(nextPosition));
 		}
 		try {
-			pacman = ImageIO.read(new File("images\\rightPacman.png"));
+			pacman = ImageIO.read(new File("images/rightPacman.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

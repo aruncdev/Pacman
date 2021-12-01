@@ -1,8 +1,12 @@
 package Pacman;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Maze extends JPanel {
@@ -27,8 +31,6 @@ public class Maze extends JPanel {
 	}
 	
 	public static void endGame() {
-		
-		
 		if(Edibles.edibles.size() == 0 && Edibles.cherries.size() == 0) {
 			items = new Drawable[0];
 			JFrame frame = new JFrame();
@@ -36,7 +38,23 @@ public class Maze extends JPanel {
 				    "You Won!!! Your score: " + score,
 				    "You Won!!!",
 				    JOptionPane.PLAIN_MESSAGE);
-		} 
+		}  else if(pacmanLives > 1) {
+			Pacman.posx = 80;
+			Pacman.posy = 80;
+			items[1] = new RedGhost();
+			items[2] = new PinkGhost();
+			items[3] = new BlueGhost();
+			items[4] = new OrangeGhost();
+			pacmanLives--;
+			
+			Long curTime = System.currentTimeMillis();
+			
+			while(System.currentTimeMillis() - curTime <= 1500) {
+				
+			}
+			Pacman.posx = 80;
+			Pacman.posy = 80;
+		}
 		else {
 			items = new Drawable[0];
 			JFrame frame = new JFrame();
@@ -76,6 +94,17 @@ public class Maze extends JPanel {
 		
 		g.setColor(Color.BLACK);
 		g.drawString("score: " + score, 500, 36);
+		
+		BufferedImage pacman = null;
+		try {
+			pacman = ImageIO.read(new File("images/rightPacman.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < pacmanLives; i++) {
+			g.drawImage(pacman, 500 + (i * 22), 45, null);
+		}
 	}
 	
 	private static void designMaze() {

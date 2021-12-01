@@ -9,14 +9,26 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class BlueGhost implements Drawable {
-	public static int posx = 280, posy = 240;
-	private long deadAt = Long.MAX_VALUE;
-	private boolean isScatterMode = true;
-	private boolean isChaseMode = false;
-	private boolean isFrightenedMode = false;
-	private long startTime = System.currentTimeMillis();
-	private boolean reachedPos = false;
-	private Queue<int[]> path = new LinkedList<>();
+	public static int posx, posy;
+	private long deadAt;
+	private boolean isScatterMode;
+	private boolean isChaseMode;
+	private boolean isFrightenedMode;
+	private long startTime;
+	private boolean reachedPos;
+	private Queue<int[]> path;
+	
+	public BlueGhost() {
+		posx = 280;
+		posy = 240;
+		deadAt = Long.MAX_VALUE;
+		isScatterMode = true;
+		isChaseMode = false;
+		isFrightenedMode = false;
+		startTime = System.currentTimeMillis();
+		reachedPos = false;
+		path = new LinkedList<>();
+	}
 	
 	@Override
 	public void draw(Graphics g) {
@@ -24,7 +36,7 @@ public class BlueGhost implements Drawable {
 		try {
 			if(posx == -1) {
 				if(System.currentTimeMillis() - deadAt > 5000) {
-					blueGhost = ImageIO.read(new File("images\\blue.png"));
+					blueGhost = ImageIO.read(new File("images/blue.png"));
 					posx = 280;
 					posy = 240;
 				} else {
@@ -33,9 +45,9 @@ public class BlueGhost implements Drawable {
 				}
 			} else {
 				if(Pacman.isHunter) {
-					blueGhost = ImageIO.read(new File("images\\afraid.png"));
+					blueGhost = ImageIO.read(new File("images/afraid.png"));
 				} else {
-					blueGhost = ImageIO.read(new File("images\\blue.png"));
+					blueGhost = ImageIO.read(new File("images/blue.png"));
 				}
 			}
 		} catch (IOException e) {
@@ -122,7 +134,6 @@ public class BlueGhost implements Drawable {
 		
 		if(posx == Pacman.posx && posy == Pacman.posy) {
 			if(Pacman.isHunter) {
-//				Score.score = Score.score + 10;
 				deadAt = System.currentTimeMillis();
 				posx = -1;
 				path = new LinkedList<>();

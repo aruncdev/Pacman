@@ -6,8 +6,8 @@ public class ShortestPathBetweenCells {
 	private static class Cell  {
         int x;
         int y;
-        int dist;  	//distance
-        Cell prev;  //parent cell in the path
+        int dist;
+        Cell prev;
 
         Cell(int x, int y, int dist, Cell prev) {
             this.x = x;
@@ -38,14 +38,13 @@ public class ShortestPathBetweenCells {
 	        }
 	    }
 
-	    LinkedList<Cell> queue = new LinkedList<>();       
+	    Queue<Cell> queue = new LinkedList<>();       
 	    Cell src = cells[sx][sy];
 	    src.dist = 0;
 	    queue.add(src);
 	    Cell dest = null;
 	    Cell p;
 	    while ((p = queue.poll()) != null) {
-	    	//find destination 
 	        if (p.x == dx && p.y == dy) { 
 	            dest = p;
 	            break;
@@ -72,7 +71,7 @@ public class ShortestPathBetweenCells {
         return res;
 	}
 	
-	private static void visit(Cell[][] cells, LinkedList<Cell> queue, int x, int y, Cell parent) { 
+	private static void visit(Cell[][] cells, Queue<Cell> queue, int x, int y, Cell parent) { 
 	    if (x < 0 || x >= cells.length || y < 0 || y >= cells[0].length || cells[x][y] == null) {
 	        return;
 	    }    

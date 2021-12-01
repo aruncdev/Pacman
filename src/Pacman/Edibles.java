@@ -39,7 +39,7 @@ public class Edibles implements Drawable {
 			int key = entry.getKey();
 			BufferedImage cherry = null;
 			try {
-				cherry = ImageIO.read(new File("images\\cherry.jpg"));
+				cherry = ImageIO.read(new File("images/cherry.jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
