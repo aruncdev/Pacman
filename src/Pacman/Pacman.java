@@ -11,7 +11,7 @@ public class Pacman implements Drawable {
 	static int posy, posx;
 	static boolean isHunter;
 	static long hunterAt;
-	private BufferedImage pacman;
+	static BufferedImage pacman;
 	
 	Pacman(){
 		posx = 80;
@@ -31,7 +31,7 @@ public class Pacman implements Drawable {
 			isHunter = false;
 		}
 		
-		g.drawImage(pacman, posx, posy, null);
+		
 		
 		if(Edibles.edibles.containsKey(posx) && Edibles.edibles.get(posx).contains(posy)) {
 			Edibles.edibles.get(posx).remove(posy);
@@ -66,6 +66,8 @@ public class Pacman implements Drawable {
 			isHunter = true;
 			hunterAt = System.currentTimeMillis();
 		}
+		
+		g.drawImage(pacman, posx, posy, null);
 		
 		boolean isDead = (posx == OrangeGhost.posx && posy == OrangeGhost.posy) || 
 				(posx == BlueGhost.posx && posy == BlueGhost.posy) ||

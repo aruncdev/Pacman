@@ -52,8 +52,6 @@ public class Maze extends JPanel {
 			while(System.currentTimeMillis() - curTime <= 1500) {
 				
 			}
-			Pacman.posx = 80;
-			Pacman.posy = 80;
 		}
 		else {
 			items = new Drawable[0];
